@@ -12,6 +12,7 @@ from flask import render_template, request, jsonify, send_file, redirect, send_f
 from app.models import *
 from app.forms import MovieForm
 from werkzeug.utils import secure_filename
+from flask_wtf.csrf import generate_csrf
 
 ###
 # Routing for your application.
@@ -39,7 +40,10 @@ def movies():
         json_message = {"message": 'Movie Successfully added',"title":title, "poster":filename,"description": description}
         return jsonify(json_message=json_message)
     return jsonify(form_errors(form))
-                            
+
+@app.route('/api/v1/csrf-token', methods=['GET'])
+def get_csrf():
+    return jsonify({'csrf_token': generate_csrf()})                 
 
 
 
