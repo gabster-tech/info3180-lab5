@@ -7,4 +7,4 @@ from wtforms.validators import InputRequired
 class MovieForm(FlaskForm):
     title = StringField('Movie Title', validators=[InputRequired()])
     description = TextAreaField('Description or Summary', validators=[InputRequired()])
-    poster = FileField('Movie poster', validators=[FileRequired(),FileAllowed(['jpg','png'],'Images')])
+    poster = FileField('Movie poster', validators=[FileRequired(),FileAllowed(['jpg','jpeg','png'],'Images')])
