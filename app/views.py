@@ -22,7 +22,7 @@ from flask_wtf.csrf import generate_csrf
 def index():
     return jsonify(message="This is the beginning of our API")
 
-@app.route('/api/v1/movies', methods=['POST'])
+@app.route('/api/v1/movies', methods=['POST','GET'])
 def movies():
     form = MovieForm()
     if request.method == 'POST':
@@ -41,12 +41,34 @@ def movies():
             json_message = {"message": 'Movie Successfully added',"title":title, "poster":filename,"description": description}
             return jsonify(json_message=json_message)
         return jsonify(form_errors(form))
-                            
+    if request.method == 'GET':
+        print("in GET")
+        movies = db.session.execute(db.select(Movies)).scalars()
+        print(movies)
+        movie_list =[]
+        for movie in movies:
+            #print (movie)
+            movie_list.append(
+            {
+                "id": movie.id,
+                "title": movie.title,   
+                "description": movie.description,
+                "poster": url_for('get_image', filename=movie.poster)
+            }
+            
+        )
+        print(movie_list)
+        return jsonify(movies=movie_list)
+                      
 
 @app.route('/api/v1/csrf-token', methods=['GET'])
 def get_csrf():
     return jsonify({'csrf_token': generate_csrf()})                 
+            
 
+@app.route("/api/v1/posters/<filename>")
+def get_image(filename):
+    return send_from_directory(os.path.join(os.getcwd(), app.config['UPLOAD_FOLDER']), filename)
 
 
 ###

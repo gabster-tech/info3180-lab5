@@ -24,6 +24,7 @@ function saveMovie() {
     })
     .then(function (data) {
       // display a success message
+      
       console.log(data);
     })
     .catch(function (error) {
@@ -62,4 +63,5 @@ function getCsrfToken() {
     </div>
     <button type="submit">Submit</button>
   </form>
+  
 </template>

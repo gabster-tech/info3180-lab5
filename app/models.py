@@ -17,7 +17,7 @@ class Movies(db.Model):
                 return str(self.id)  # python 3 support
 
     def __repr__(self):
-        return '<User %r>' % (self.poster)
+        return '<User %r>' % (self.title)
     
     def  __init__  (self, title, description, poster, created_at):
         self.title = title
