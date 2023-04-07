@@ -40,7 +40,7 @@ def movies():
             flash('Movie title was added successfully!')
             json_message = {"message": 'Movie Successfully added',"title":title, "poster":filename,"description": description}
             return jsonify(json_message=json_message)
-        return jsonify(form_errors(form))
+        return jsonify(errors=form_errors(form))
     if request.method == 'GET':
         print("in GET")
         movies = db.session.execute(db.select(Movies)).scalars()
@@ -55,7 +55,6 @@ def movies():
                 "description": movie.description,
                 "poster": url_for('get_image', filename=movie.poster)
             }
-            
         )
         print(movie_list)
         return jsonify(movies=movie_list)

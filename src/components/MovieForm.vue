@@ -1,8 +1,11 @@
 <script setup>
 import { ref, onMounted } from "vue";
-
 let csrf_token = ref("");
-let display_msg = ref([]);
+let flashMessage = ref("");
+let displayFlash = ref(false);
+let isSuccess = ref(false);
+let alertSuccessClass = ref("alert-success");
+let alertErrorClass = ref("alert-danger");
 
 onMounted(() => {
   getCsrfToken();
@@ -23,9 +26,18 @@ function saveMovie() {
       return response.json();
     })
     .then(function (data) {
-      // display a success message
-      
       console.log(data);
+      if ("errors" in data) {
+        flashMessage.value = [...data.errors];
+        isSuccess.value = false;
+        displayFlash.value = true;
+      } else {
+        displayFlash.value = true;
+        isSuccess.value = true;
+        flashMessage.value = "Movie added successfully!";
+        clearFormFields();
+        console.log(data);
+      }
     })
     .catch(function (error) {
       console.log(error);
@@ -40,28 +52,45 @@ function getCsrfToken() {
       csrf_token.value = data.csrf_token;
     });
 }
+
+function clearFormFields() {
+  title.value = "";
+  description.value = "";
+  poster.value = "";
+}
 </script>
 
 <template>
-  <form id="movieForm" @submit.prevent="saveMovie">
-    <div class="form-group mb-3">
-      <label for="title" class="form-label">Movie Title</label>
-      <input type="text" name="title" class="formcontrol" />
+  <div class="container">
+    <div
+      v-if="displayFlash"
+      v-bind:class="[isSuccess ? alertSuccessClass : alertErrorClass]"
+      class="alert"
+    >
+      {{ flashMessage }}
     </div>
-    <div class="form-group mb-3">
-      <label for="description" class="form-label">Summary or Description</label>
-      <input type="textarea" name="description" class="formcontrol" />
-    </div>
-    <div class="form-group mb-3">
-      <label for="poster" class="form-label">Poster</label>
-      <input
-        type="file"
-        name="poster"
-        accept="image/png, image/jpeg"
-        class="formcontrol"
-      />
-    </div>
-    <button type="submit">Submit</button>
-  </form>
-  
+    <form id="movieForm" @submit.prevent="saveMovie">
+      <div class="mb-3">
+        <label for="exampleFormControlInput1" class="form-label">Title</label>
+        <input type="text" class="form-control" id="exampleFormControlInput1" />
+      </div>
+      <div class="mb-3">
+        <label for="exampleFormControlTextarea1" class="form-label"
+          >Summary or Description</label
+        >
+        <textarea
+          class="form-control"
+          id="exampleFormControlTextarea1"
+          rows="3"
+        ></textarea>
+      </div>
+      <div class="mb-3">
+        <label for="formFile" class="form-label">Poster</label>
+        <input class="form-control" type="file" id="formFile" />
+      </div>
+      <div class="col-auto">
+        <button type="submit" class="btn btn-primary mb-3">Submit</button>
+      </div>
+    </form>
+  </div>
 </template>

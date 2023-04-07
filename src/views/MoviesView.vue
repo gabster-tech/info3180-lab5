@@ -74,5 +74,6 @@
     height: 300px;
     width: 200px;
     object-fit: cover;
+    
   }
 </style>
