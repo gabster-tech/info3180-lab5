@@ -40,6 +40,8 @@
 
 <template>
 <div class="container">
+  <h1>Movies</h1>
+  <br/>
   <div class="movie-card" v-for="movie in movies">
     <div class="card mb-3" >
     <div class="row g-0">

@@ -19,7 +19,7 @@ function saveMovie() {
     method: "POST",
     body: form_data,
     headers: {
-      "X-CSRFToken": csrf_token.value,
+    "X-CSRFToken": csrf_token.value,
     },
   })
     .then(function (response) {
@@ -62,6 +62,8 @@ function clearFormFields() {
 
 <template>
   <div class="container">
+  <h1>Uploads</h1>
+  <br/>
     <div
       v-if="displayFlash"
       v-bind:class="[isSuccess ? alertSuccessClass : alertErrorClass]"
